@@ -20,6 +20,7 @@ import pandas_datareader.data as web
 import pickle 
 import requests
 import time 
+from copy import deepcopy
 
 URL = "http://financials.morningstar.com/ajax/exportKR2CSV.html?t="
 URL_END = "&culture=en-CA&region=CAN&order=asc&r=581263"
@@ -86,16 +87,51 @@ def compile_data():
    
     df = pd.read_csv('key_ratios/AAV_key_ratios.csv', skiprows=2, nrows=10)
     df.rename(columns={'Unnamed: 0': "AAV Dates"}, inplace=True)
-    for i in range(9):
-        if i!=5 and i!=9:
+    for i in range(10):
+        if (i!=9 and i!=6):
             df.drop([i], inplace=True)
+    
     df = df.reset_index(drop=True)
     df.set_index('AAV Dates', inplace=True)
-    print(df)
-    print()
-    for column in df:
-        print(df[column])
-        print()
+    dd = deepcopy(df)
+    dd.drop('Book Value Per Share * CAD', inplace=True)
+    df.drop('Dividends CAD', inplace=True)
+    
+    
+    book_value_per_share = []
+    BV_share = []
+    BPS = []
+    dividenda = []
+    dividendb = []
+    dividend = []
+    
+    for col in df:
+        book_value_per_share.append(df[col].values)
+        
+    for x in book_value_per_share:
+        BV_share.append((x.tolist()))
+        
+    for x in BV_share:
+        for y in x:
+            if (str(y) != 'nan'):
+                BPS.append(y)
+    
+    for col in dd:
+        dividenda.append(dd[col].values)
+    
+    for x in dividenda:
+        dividendb.append((x.tolist()))
+    
+    for x in dividendb:
+        for y in x:
+            dividend.append(y)
+                
+    return BPS, dividend
+    
+#     print()
+#     for column in df:
+#         print(df[column])
+#         print()
 #         df.set_index('Date', inplace=True)
         
 #         df.rename(columns = {'Adj Close': ticker}, inplace=True)
@@ -112,7 +148,30 @@ def compile_data():
 #         print(main_df.head())
 #         main_df.to_csv('sptsx_data.csv')
         
-compile_data()
+BPS, dividend = compile_data()
+
+def calculate_intrinsic_value_BPS(data, dividend, years, federal_note):
+    time_period_years = len(data)
+    time_period_years -= 2
+    TTM_BPS = data[-1]
+    TTM_dividend = dividend[-1]
+    if (str(TTM_dividend) != 'nan'):
+        TTM_dividend = TTM_dividend
+    else:
+        TTM_dividend = 0.0
+    
+    data = data[:-1]
+    start_BPS = data[0]
+    end_BPS = data[-1]
+    average_BPS_per_year = (((end_BPS/start_BPS)**(1/time_period_years))-1)*100
+    print("Average BPS:    {}".format(average_BPS_per_year))
+    print("TTM Dividend:   {}".format(TTM_dividend))
+    
+    
+    
+    
+    
+calculate_intrinsic_value_BPS(BPS, dividend, years=10, federal_note=0.035)
 
 def visualize_data():
     df = pd.read_csv('sptsx_joined_closes.csv')
