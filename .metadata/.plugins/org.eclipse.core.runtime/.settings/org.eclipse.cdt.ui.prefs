@@ -1,0 +1,7 @@
+eclipse.preferences.version=1
+removeTrailingWhitespace=false
+removeTrailingWhitespaceEditedLines=false
+spelling_locale_initialized=true
+useAnnotationsPrefPage=true
+useQuickDiffPrefPage=true
+wizard.preferred.toolchains=cdt.managedbuild.toolchain.gnu.mingw.exe.debug

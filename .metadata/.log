@@ -1,0 +1,9 @@
+!SESSION 2019-01-25 18:23:20.936 -----------------------------------------------
+eclipse.buildId=4.10.0.I20181206-0815
+java.version=9.0.4
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=canada_CANADA
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -data C:\Users\kgap1\Documents\GitHub\StockScreener
+
+!ENTRY org.eclipse.oomph.setup.ui 1 0 2019-01-25 18:23:38.960
+!MESSAGE Setup tasks were performed during startup updating 205 preferences. See 'C:\Users\kgap1\cp104\eclipse\configuration\org.eclipse.oomph.setup\setup.log' for details
